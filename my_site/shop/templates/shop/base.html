@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+        <link rel="stylesheet" href="{% static "shop/base.css" %}">
+    {% endblock head %}
+    <title>
+        {% block title_page %}
+            Document
+        {% endblock title_page %}
+    </title>
+</head>
+<body>
+    <header> <!-- Голова сайта-->
+        {% block header %}
+            <a href="#">Магазин</a>
+            <a href="#">Мои заказы</a>
+            <a href="#">Корзина</a>
+            <a href="#">Поддержка</a>
+            <a href="#">Мой аккаунт</a>
+        {% endblock header %}
+    </header>
+        
+    <main> <!-- Главная часть -->
+        {% block main %}
+        
+        {% endblock main %}
+    </main>
+    
+    <footer> <!-- нижния часть -->
+        <!-- В разработке -->
+    </footer>
+</body>
+</html>
