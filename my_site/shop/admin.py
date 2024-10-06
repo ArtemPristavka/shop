@@ -7,11 +7,22 @@ from .models import Category, Product
 class CategoryAdmin(admin.ModelAdmin):
     "Model Category for Admin site"
     
-    pass
+    fields = ["id", "name", "created_at"]
+    list_display = ["id", "name"]
+    list_display_links = ["id", "name"]
+    readonly_fields = ["id", "created_at"]
+    search_fields = ["name__icontains"]
+    search_help_text = "Поиск по Имени категории"
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     "Model Product for Admin site"
     
-    pass
+    fields = ["id", "name", "description", "price", "created_at", "archived"]
+    list_display = ["id", "name", "price"]
+    list_display_links = ["id", "name"]
+    readonly_fields = ["id", "created_at"]
+    search_fields = ["name__icontains", "description__icontains"]
+    search_help_text = "Поиск по Имени и Описанию продукта"
+    
