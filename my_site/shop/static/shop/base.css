@@ -8,7 +8,7 @@ header {
     margin-right: -8px;
 }
 
-a {
+header > a {
     padding: 30px;
 }
 

@@ -1,0 +1,29 @@
+.main-up-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 25px;
+}
+
+.pre-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.photo-container {
+    max-width: 40%;
+    min-width: 10%;
+
+    padding-right: 5%;
+}
+
+/* .text-container {
+    
+} */
+
+.main-down-container {
+    margin: 60px 50px;
+}

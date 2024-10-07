@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ block.super }}
+    <link rel="stylesheet" href="{% static "shop/detail-product.css" %}">
 {% endblock head %}
 
 {% block title_page %}
@@ -15,5 +16,21 @@
 {% endblock header %}
 
 {% block main %}
-    
+    <div>
+        <div class="main-up-container">
+            <div>
+                <a href="{{ product.image.photo.url }}" class="pre-photo-container">
+                    <img class="photo-container" src="{{ product.image.photo.url }}" alt="">
+                </a>
+            </div>
+            <div class="text-container">
+                <p>Название: {{ product.name }}</p>
+                <p>Цена: {{ product.price }}</p>
+                <p>Категория: {{ product.category.name }}</p>
+            </div>
+        </div>
+        <div class="main-down-container">
+            <p>Описание: {{ product.description }}</p>
+        </div>
+    </div>
 {% endblock main %}

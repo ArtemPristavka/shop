@@ -2,6 +2,7 @@ from typing import Iterable
 from django.db import models
 
 
+
 class Category(models.Model):
     "Model Category"
     
@@ -12,7 +13,7 @@ class Category(models.Model):
         return self.name
     
     def save(self, *args, **kwargs) -> None:
-        "Save model with lower word"
+        "Save model with field name lower word"
         
         self.name = self.name.lower()
         return super().save(*args, **kwargs) 
@@ -37,8 +38,43 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs) -> None:
-        "Save model with lower word"
+        "Save model with field name lower word"
         
         self.name = self.name.lower()
         return super().save(*args, **kwargs)
+    
+
+def generic_path_to_save_photo(instance: "ProductImage", filename: str) -> str:
+    """
+    Generic path to save photo in MEDIA_ROOT
+
+    Args:
+        instance (ProductImage): model ProductImage
+        filename (str): name file download
+
+    Returns:
+        str: path to save file begin with MEDIA_ROOT
+    """
+    return f"products/product_{instance.product.pk}/{filename}"
+
+    
+class ProductImage(models.Model):
+    "Model have image for product"
+    
+    photo = models.ImageField(
+        upload_to=generic_path_to_save_photo, # type: ignore
+        null=True
+    )
+    product = models.OneToOneField(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="image"
+    )
+    description = models.CharField(
+        max_length=100,
+        blank=True
+    )
+    
+    def __str__(self) -> str:
+        return f"Фото товара: {self.product.name}"
     

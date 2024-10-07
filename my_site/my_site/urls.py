@@ -25,6 +25,10 @@ urlpatterns = [
     path("shop/", include("shop.urls")),
 ]
 
-# if settings.DEBUG is True:
-#     urlpatterns + static(settings.STATIC_URL, settings.STATIC_ROOT)
-    
+if settings.DEBUG is True: # type: ignore
+    urlpatterns.extend(
+        static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # type: ignore
+        )
+    urlpatterns.extend(
+        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # type: ignore
+        )
