@@ -26,6 +26,12 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2)
     created_at = models.DateField(auto_now_add=True)
     archived = models.BooleanField(default=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        related_name="products",
+        null=True
+    )
     
     def __str__(self) -> str:
         return self.name
