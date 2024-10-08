@@ -1,0 +1,22 @@
+{% extends "my_auth/base.html" %}
+
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "my_auth/register-form.css" %}">
+{% endblock head %}
+
+{% block title_page %}
+    Регистрация
+{% endblock title_page %}
+
+{% block main %}
+    <div class="main-container">
+        <form action="." method="post" class="form-container">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Регистрация</button>
+        </form>
+    </div>
+{% endblock main %}

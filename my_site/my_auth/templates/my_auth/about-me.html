@@ -1,0 +1,21 @@
+{% extends "my_auth/base.html" %}
+
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "my_auth/about-me.css" %}">
+{% endblock head %}
+
+{% block title_page %}
+    {{ object.username }}
+{% endblock title_page %}
+
+{% block main %}
+    <div class="main-container">
+        <p>Username: {{ object.get_username }}</p>
+        <p>Имя: {{ object.first_name }}</p>
+        <p>Фамилия: {{ object.last_name }}</p>
+        <p>Email: {{ object.email }}</p>
+    </div>
+{% endblock main %}

@@ -12,5 +12,5 @@ urlpatterns = [
         "products/<int:category>/", 
         ProductListByCategoryView.as_view(), 
         name="products-list-by-category"
-    )
+    ),
 ]

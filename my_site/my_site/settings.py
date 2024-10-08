@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'shop.apps.ShopConfig', # Shop
-    'auth.apps.AuthConfig', # Auth
+    'my_auth.apps.MyAuthConfig', # Auth
 ]
 
 MIDDLEWARE = [

@@ -1,3 +1,6 @@
 venv*
 */work.db
 */dev_page/
+*/*.db
+*/all_users.txt
+**.db

@@ -1,0 +1,20 @@
+{% extends "my_auth/base.html" %}
+
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "my_auth/login.css" %}">
+{% endblock head %}
+
+{% block title_page %}
+    Вход
+{% endblock title_page %}
+
+{% block main %}
+    <form action="." method="post" class="main-container">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Войти</button>
+    </form>
+{% endblock main %}
