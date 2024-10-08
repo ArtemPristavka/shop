@@ -11,10 +11,6 @@
     Подробности
 {% endblock title_page %}
 
-{% block header %}
-    {{ block.super }}
-{% endblock header %}
-
 {% block main %}
     <div>
         <div class="main-up-container">
@@ -24,9 +20,9 @@
                 </a>
             </div>
             <div class="text-container">
-                <p>Название: {{ product.name }}</p>
+                <p>Название: {{ product.name|title }}</p>
                 <p>Цена: {{ product.price }}</p>
-                <p>Категория: {{ product.category.name }}</p>
+                <p>Категория: {{ product.category.name|title }}</p>
             </div>
         </div>
         <div class="main-down-container">

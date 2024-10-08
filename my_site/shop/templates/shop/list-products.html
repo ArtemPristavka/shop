@@ -1,0 +1,51 @@
+{% extends "shop/base.html" %}
+
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "shop/list-products.css" %}">
+{% endblock head %}
+
+{% block title_page %}
+    Список товаров
+{% endblock title_page %}
+
+{% block main %}
+    <div class="main-container">
+        <div class="left-container">
+            <div>
+                <h4>Категория:</h4>
+            </div>
+            <div>
+                <ul class="out-circle">
+                    {% for category in object_list %}
+                        <li><a href="{% url "shop:products-list-by-category" category=category.id %}">{{ category.name|title }}</a></li>
+                    {% endfor %}
+                    {% if show_return %}
+                        <li><a href="{% url "shop:products-list" %}">Вернуться</a>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="right-container">
+            <ul>
+                {% for product in  products_list %}
+                    <div class="content-container">
+                        <div class="pre-photo-container">
+                            {% comment %} <a href="{{ product.image.photo.url }}"> {% endcomment %}
+                            <img src="{{ product.image.photo.url }}" alt="" class="photo-container">
+                            {% comment %} </a> {% endcomment %}
+                        </div>
+                        <div class="pre-text-container">
+                            {% comment %} <p>Название: {{ product.name|title }}</p> {% endcomment %}
+                            <a href="{% url "shop:product-detail" pk=product.id %}">Название: {{ product.name|title }}</a>
+                            <p>Цена: {{ product.price }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock main %}
+
