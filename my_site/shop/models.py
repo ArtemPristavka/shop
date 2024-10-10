@@ -8,14 +8,14 @@ class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     created_at = models.DateField(auto_now_add=True)
 
-    def __str__(self) -> str:
-        return self.name
-    
     def save(self, *args, **kwargs) -> None:
         "Save model with field name lower word"
         
         self.name = self.name.lower()
         return super().save(*args, **kwargs) 
+    
+    def __str__(self) -> str:
+        return self.name
     
 
 class Product(models.Model):

@@ -18,7 +18,7 @@
         {% block header %}
             <a class="head" href="{% url "shop:products-list" %}">Магазин</a>
             <a class="head" href="#">Мои заказы</a>
-            <a class="head" href="#">Корзина</a>
+            <a class="head" href="{% url "shop:basket-user" %}">Корзина</a>
             <a class="head" href="#">Поддержка</a>
             {% if user.is_authenticated %}
                 <a class="head" href="{% url "my_auth:about-user" pk=user.id %}">Мой аккаунт</a>

@@ -23,6 +23,7 @@
                 <p>Название: {{ product.name|title }}</p>
                 <p>Цена: {{ product.price }}</p>
                 <p>Категория: {{ product.category.name|title }}</p>
+                <a href="{% url "shop:add-product" pk=product.id %}">Добавить в корзину</a>
             </div>
         </div>
         <div class="main-down-container">

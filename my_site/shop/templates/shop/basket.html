@@ -1,0 +1,15 @@
+{% extends "shop/base.html" %}
+
+{% block title_page %}
+    Корзина
+{% endblock title_page %}
+
+{% block main %}
+    {% if products %}
+        {% for product in products %}
+            <p>{{ product.name }}   {{ product.price }}  <a href="{% url "shop:remove-product" pk=product.id %}">Убрать из корзины</a></p>
+        {% endfor %}
+    {% else %}
+        <p>Корзина пуста</p>
+    {% endif %}
+{% endblock main %}
