@@ -9,6 +9,10 @@
         {% for product in products %}
             <p>{{ product.name }}   {{ product.price }}  <a href="{% url "shop:remove-product" pk=product.id %}">Убрать из корзины</a></p>
         {% endfor %}
+        <form action="{% url "shop:create-order" %}" method="post">
+            {% csrf_token %}
+            <button>Сделать заказ</button>
+        </form>
     {% else %}
         <p>Корзина пуста</p>
     {% endif %}

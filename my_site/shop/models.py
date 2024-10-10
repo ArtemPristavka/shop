@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
+
+from typing import Any
+from pathlib import Path
 
 
 
@@ -16,6 +20,8 @@ class Category(models.Model):
         return super().save(*args, **kwargs) 
     
     def __str__(self) -> str:
+        "Return string object"
+
         return self.name
     
 
@@ -35,11 +41,12 @@ class Product(models.Model):
     )
     
     def __str__(self) -> str:
+        "Return string object"
         return self.name
 
     def save(self, *args, **kwargs) -> None:
         "Save model with field name lower word"
-        
+        # print(self.objects.name)
         self.name = self.name.lower()
         return super().save(*args, **kwargs)
     
@@ -75,17 +82,35 @@ class ProductImage(models.Model):
         blank=True
     )
     
+    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
+        "Delete object from DB and delete file(image) from MEDIA_ROOT"
+
+        answer =  super().delete(*args, **kwargs)
+        
+        media_path: Path = settings.MEDIA_ROOT / str(self.photo)
+        if media_path.exists(): # Check exists file
+            media_path.unlink() # Delete Image file
+            
+        return answer
+    
     def __str__(self) -> str:
+        "Return string object"
         return f"Фото товара: {self.product.name}"
 
 
 class StatusOrder(models.Model):
-    
+    "Model for status order"
+
     name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        "Return string object"
+        return self.name
 
 
 class Order(models.Model):
-    
+    "Model Order"
+
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
@@ -93,12 +118,13 @@ class Order(models.Model):
     )
     product = models.ManyToManyField(Product, related_name="orders")
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.ForeignKey(
+    status = models.ForeignKey(     
         StatusOrder, 
         on_delete=models.SET_NULL, 
         related_name="orders",
-        null=True
+        null=True,
+        default=1 # type: ignore
     )
     
-
-    
+    def __str__(self) -> str:
+        return f"id: {self.pk} for user: {self.user.username}"

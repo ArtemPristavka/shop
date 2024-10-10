@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpRequest
 from django.db.models import QuerySet
 
-from .models import Category, Product, ProductImage
+from .models import Category, Product, ProductImage, StatusOrder, Order
 
 
 
@@ -36,9 +36,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ["name__icontains", "description__icontains"]
     search_help_text = "Поиск по Имени и Описанию продукта"
     
-    inlines = [
-        ProductImageInline
-    ]
+    inlines = [ProductImageInline]
     
     actions = ["make_archived_products", "make_unarchiving_products"]
     
@@ -61,5 +59,23 @@ class ProductAdmin(admin.ModelAdmin):
             request=request,
             message=f"Successfull maked unarchived products in cout: {updated}"
         )
-            
+
+
+@admin.register(StatusOrder)
+class StatusOrderAdmin(admin.ModelAdmin):
+    
+    fields = ["id", "name"]
+    list_display = ["id", "name"]
+    list_display_links = ["id", "name"]
+    search_fields = ["name__icontains"]
+    search_helt_text = "Поиск по названию статуса"
+    
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    
+    fields = ["id", "user", "product", "status", "created_at"]
+    list_display = ["id", "user", "status", "created_at"]
+    list_display_links = ["id", "user", "status", "created_at"]
+    readonly_fields = ["id", "created_at"]
     

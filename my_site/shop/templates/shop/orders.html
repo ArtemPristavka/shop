@@ -1,0 +1,15 @@
+{% extends "shop/base.html" %}
+
+{% block title_page %}
+    Заказы
+{% endblock title_page %}
+
+{% block main %}
+    {% if object_list %}
+        {% for order in object_list %}
+        <p><a href="">Заказ от {{ order.created_at }}</a></p>
+        {% endfor %}
+    {% else %}
+        <p>У вас нет заказов</p>
+    {% endif %}
+{% endblock main %}

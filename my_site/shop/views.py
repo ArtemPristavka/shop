@@ -1,11 +1,12 @@
 from typing import Any, List
+from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.http.response import HttpResponse
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import RedirectView
 from django.urls import reverse, reverse_lazy
 
-from .models import Product, Category
+from .models import Product, Category, Order
 
 
 
@@ -102,6 +103,7 @@ class DeleteProductByUserView(RedirectView):
 
 class BasketUserView(TemplateView):
     "View for basket-user"
+    
     template_name = "shop/basket.html"
     
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -117,4 +119,36 @@ class BasketUserView(TemplateView):
             kwargs["products"] = need_products # Add in context
             
         return super().get_context_data(**kwargs)
+
+
+class OrderView(ListView):
+    "View for show orders user"
     
+    template_name = "shop/orders.html"
+    
+    def get_queryset(self) -> QuerySet[Any]:
+        user_id = self.request.user.pk
+        return Order.objects.filter(user=user_id).select_related("status")
+        # TODO Add in template status
+
+class CreateOrderView(RedirectView):
+    "View for create order and redivrect on shop -> orders-list"
+
+    url = reverse_lazy("shop:orders-list")
+    
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        "Create order and clear session(basket)"
+        
+        all_products = request.session.get("basket") # Get pk products from session(basket)
+        if all_products:
+            order = Order.objects.create(
+                user=request.user
+            )
+            for i_pk in all_products: # Add products by order
+                order.product.add(Product.objects.get(pk=i_pk))
+            else:
+                order.save() # Save order
+                del request.session["basket"] # Delete basket from session
+                request.session.save() # Save session last delete basket
+
+        return super().post(request, *args, **kwargs)
