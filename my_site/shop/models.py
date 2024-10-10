@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -76,4 +77,28 @@ class ProductImage(models.Model):
     
     def __str__(self) -> str:
         return f"Фото товара: {self.product.name}"
+
+
+class StatusOrder(models.Model):
+    
+    name = models.CharField(max_length=50)
+
+
+class Order(models.Model):
+    
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name="orders"
+    )
+    product = models.ManyToManyField(Product, related_name="orders")
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.ForeignKey(
+        StatusOrder, 
+        on_delete=models.SET_NULL, 
+        related_name="orders",
+        null=True
+    )
+    
+
     
