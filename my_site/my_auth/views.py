@@ -1,10 +1,13 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, TemplateView
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from typing import Any
 
 
 
@@ -56,10 +59,10 @@ class UserRegisterView(CreateView):
         
         return HttpResponseRedirect(self.get_success_url())
     
-    def get_success_url(self) -> str:
-        "Redirect new autheticeted user on page user"
+    # def get_success_url(self) -> str:
+    #     "Redirect new autheticeted user on page user"
         
-        return reverse("my_auth:about-user", kwargs={"pk": self.request.user.pk})
+    #     return reverse("my_auth:about-user", kwargs={"pk": self.request.user.pk})
     
 
 class UserLoginView(LoginView):
@@ -70,15 +73,21 @@ class UserLoginView(LoginView):
     template_name = "my_auth/login.html"
 
 
-class UserLogoutView(LogoutView):
+class UserLogoutView(LoginRequiredMixin, LogoutView):
     "View for completing logout from site"
     
     next_page = reverse_lazy("shop:products-list")
 
 
-class UserInfoView(DetailView):
+class UserInfoView(LoginRequiredMixin, TemplateView):
     "View for show info about user"
     
-    model = User
     template_name = "my_auth/about-me.html"
+    
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        # print(f"page last: {self.request.META.get('HTTP_REFERER')}")
+        # print(f"page last -> split: {self.request.META.get('HTTP_REFERER').split('/', 3)[3]}")
+        
+        kwargs["object"] = User.objects.get(pk=self.request.user.pk)
+        return super().get_context_data(**kwargs)
     

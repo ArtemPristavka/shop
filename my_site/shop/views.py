@@ -5,6 +5,7 @@ from django.http.response import HttpResponse
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.base import RedirectView
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product, Category, Order
 
@@ -57,20 +58,19 @@ class ProductListByCategoryView(ListView):
         return super().get_context_data(**kwargs)
     
 
-class AddProductByUserView(RedirectView):
+class AddProductInBasketView(LoginRequiredMixin, RedirectView):
     "View for add products in session(basket) and redirect shop -> product-detail"
     
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         "Get id(pk) product and add her in session (basket) = List[int]"
 
-        if request.user.is_authenticated:
-            if kwargs.get("pk"): # Get id(pk) product
-                if request.session.get("basket"):
-                    request.session["basket"].append(kwargs.get("pk")) # Add id(pk) in session(basket)
-                    request.session.save() # Save session last update
-                else:
-                    request.session["basket"] = [kwargs.get("pk")] # Add id(pk) in session(basket)
-                    request.session.save() # Save session last updated
+        if kwargs.get("pk"): # Get id(pk) product
+            if request.session.get("basket"):
+                request.session["basket"].append(kwargs.get("pk")) # Add id(pk) in session(basket)
+                request.session.save() # Save session last update
+            else:
+                request.session["basket"] = [kwargs.get("pk")] # Add id(pk) in session(basket)
+                request.session.save() # Save session last updated
                     
         return super().get(request, *args, **kwargs)
     
@@ -78,13 +78,12 @@ class AddProductByUserView(RedirectView):
         "Redirect on shop -> product-detail by id(pk) product"
         
         product_id = kwargs.get("pk") # Get id(pk) product
-        if self.request.user.is_authenticated:
-            return reverse("shop:product-detail", kwargs={"pk": product_id})
+        return reverse("shop:product-detail", kwargs={"pk": product_id})
         
         return reverse("my_auth:register-user")
     
 
-class DeleteProductByUserView(RedirectView):
+class DeleteProductFromBasketrView(LoginRequiredMixin, RedirectView):
     "View for delete product from session(basket) and redirect shop -> basket-user"
     
     url = reverse_lazy("shop:basket-user")
@@ -92,16 +91,15 @@ class DeleteProductByUserView(RedirectView):
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         "Delete product from session(basket) by id(pk)"
 
-        if request.user.is_authenticated:
-            if kwargs.get("pk"): 
-                basket: List[int] = request.session["basket"] # Get session(basket)
-                basket.pop(basket.index(kwargs["pk"]))  # Delete product from session(basket)
-                request.session.save() # Save session last updated
+        if kwargs.get("pk"): 
+            basket: List[int] = request.session["basket"] # Get session(basket)
+            basket.pop(basket.index(kwargs["pk"]))  # Delete product from session(basket)
+            request.session.save() # Save session last updated
                 
         return super().get(request, *args, **kwargs)
 
 
-class BasketUserView(TemplateView):
+class BasketUserView(LoginRequiredMixin, TemplateView):
     "View for basket-user"
     
     template_name = "shop/basket.html"
@@ -121,7 +119,7 @@ class BasketUserView(TemplateView):
         return super().get_context_data(**kwargs)
 
 
-class OrderView(ListView):
+class OrderView(LoginRequiredMixin, ListView):
     "View for show orders user"
     
     template_name = "shop/orders.html"
@@ -131,7 +129,7 @@ class OrderView(ListView):
         return Order.objects.filter(user=user_id).select_related("status")
         # TODO Add in template status
 
-class CreateOrderView(RedirectView):
+class CreateOrderView(LoginRequiredMixin, RedirectView):
     "View for create order and redivrect on shop -> orders-list"
 
     url = reverse_lazy("shop:orders-list")

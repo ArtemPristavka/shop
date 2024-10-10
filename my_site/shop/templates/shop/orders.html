@@ -7,7 +7,7 @@
 {% block main %}
     {% if object_list %}
         {% for order in object_list %}
-        <p><a href="">Заказ от {{ order.created_at }}</a></p>
+        <p><a href="#">Заказ от {{ order.created_at }}</a></p>
         {% endfor %}
     {% else %}
         <p>У вас нет заказов</p>

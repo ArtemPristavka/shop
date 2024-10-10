@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import (
     ProductDetailView, ProductListView, ProductListByCategoryView,
-    AddProductByUserView, BasketUserView, DeleteProductByUserView,
+    AddProductInBasketView, BasketUserView, DeleteProductFromBasketrView,
     OrderView, CreateOrderView
 )
 
@@ -19,10 +19,10 @@ urlpatterns = [
         name="products-list-by-category"
     ),
     path("products/basket/", BasketUserView.as_view(), name="basket-user"),
-    path("product/basket/add/<int:pk>/", AddProductByUserView.as_view(), name="add-product"),
+    path("product/basket/add/<int:pk>/", AddProductInBasketView.as_view(), name="add-product"),
     path(
         "products/basket/remove/<int:pk>", 
-        DeleteProductByUserView.as_view(), 
+        DeleteProductFromBasketrView.as_view(), 
         name="remove-product"
     ),
     path("products/orders/", OrderView.as_view(), name="orders-list"),
